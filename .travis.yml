@@ -9,7 +9,7 @@ before_install:
 
 script:
     - ls -alhtr
-    - cd /app
     - go build main.go
+    - ls -alhtr
     - ./main &
     - curl http://localhost:8080/
