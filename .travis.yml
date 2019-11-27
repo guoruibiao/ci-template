@@ -2,7 +2,7 @@ language: go
 
 script:
   - cd $GOPATH/src/github.com/guoruibiao/ci-template
-  - go build main.go
+  - make
   - ls -alhtr
-  - ./main &
+  - ./ci-template &
   - curl 127.0.0.1:8000
