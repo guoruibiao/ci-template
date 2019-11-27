@@ -1,0 +1,16 @@
+language: go
+
+go:
+  - 1.12.x
+
+services:
+  - docker
+
+before_install:
+  - docker build -t marksinoberg/ci-template .
+  - docker run -d -p 127.0.0.1:80:4567 marksinoberg/ci-template /bin/sh -c "cd /app; go run main.go"
+  - docker ps -a
+
+script:
+    - ls -alhtr
+    - curl http://localhost:8080/
