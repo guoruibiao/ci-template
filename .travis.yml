@@ -1,15 +1,8 @@
 language: go
 
-go:
-  - 1.12.x
-
-
-before_install:
-  - go version
-
 script:
-    - ls -alhtr
-    - go build main.go
-    - ls -alhtr
-    - ./main &
-    - curl http://localhost:8080/
+  - cd $GOPATH/src/github.com/guoruibiao/ci-template
+  - go build main.go
+  - ls -alhtr
+  - ./main &
+  - curl 127.0.0.1:8000

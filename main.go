@@ -1,29 +1,27 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
+	"os"
+	"strconv"
 )
 
-func index(writer http.ResponseWriter, request *http.Request) {
-	indexhtml := `
-	hello travis-ci.
-`
-	fmt.Fprintln(writer, indexhtml)
+func httphandler(w http.ResponseWriter, r *http.Request) {
+	ipAddress, _, _ := net.SplitHostPort(r.RemoteAddr)
+	fmt.Fprintf(w, "%s", ipAddress)
 }
 
 func main() {
-	// 整几个命令行参数
-	port := flag.String("p", "8080", "监听端口")
-	flag.Parse()
-
-	fmt.Println("start listening at `http://localhost:" + *port + "/` ...")
-	http.HandleFunc("/", index)
-
-	err := http.ListenAndServe(":"+*port, nil)
+	port, err := strconv.Atoi(os.Getenv("WHATISMYIP_PORT"))
 	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
+		log.Fatalf("Please make sure the environment variable WHATISMYIP_PORT is defined and is a valid integer [1024-65535], error: %s", err)
 	}
+
+	listener := fmt.Sprintf(":%d", port)
+
+	http.HandleFunc("/", httphandler)
+	log.Fatal(http.ListenAndServe(listener, nil))
 }
